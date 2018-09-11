@@ -8,20 +8,16 @@
 </template>
 
 <script>
+import {mapState, mapActions} from 'vuex'
 export default {
-    data(){
-        return {
-            count:0
-        }
-    },
+    computed: mapState({
+        count: state => state.count.count
+    }),
     methods: {
-        increase() {
-            this.count++
-        },
-        decrease(){
-            if(this.count!==0) this.count--
-            else alert(`Already 0`)
-        }
+       ...mapActions({
+           increase: 'count/increase',
+           decrease: 'count/decrease'
+       })
     }
 }
 </script>
