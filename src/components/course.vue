@@ -20,7 +20,7 @@
         </div>
     </div>
     <!-- create a table that display all the input date -->
-    <div class="container" v-if="length>0">
+    <div class="container" v-if="storage.length>0">
         <h5>
             All the input Data:  
         </h5>
@@ -50,35 +50,47 @@
 </template>
 
 <script>
+import {mapState, mapActions} from 'vuex'
+
 export default {
-    data(){
-        return {
-            storage: [],
-            length: 0,
-            category: '',
-            staff: '',
-            course: ''
+    computed:{
+        ...mapState({
+            storage: state => state.course.storage,
+            category: state => state.course.category,
+            course: state => state.course.course,
+            staff: state => state.course.staff
+        }),
+        category: {
+            get () {
+                return this.$store.state.course.category
+            },
+            set (value) {
+                this.$store.commit('course/updateCategory', value)
+            }
+        },
+        course: {
+            get () {
+                return this.$store.state.course.course
+            },
+            set (value) {
+                this.$store.commit('course/updateCourse', value)
+            }
+        },
+        staff: {
+            get () {
+                return this.$store.state.course.staff
+            },
+            set (value) {
+                this.$store.commit('course/updateStaff', value)
+            }
         }
     },
-    methods:{
-        addCourse: function() {
-            if (!(this.course && this.staff && this.category)) {
-                return
-            }
-            this.storage.push({
-                course: this.course,
-                staff: this.staff,
-                category: this.category,
-            });
-            this.length++;
-            this.course = '';
-            this.staff = '';
-            this.category = '';
-        },
-        removeCourse: function(data) {
-            this.storage = this.storage.filter((value) => data != value);
-            this.length--;
-        }
+   
+    methods: {
+         ...mapActions({
+           addCourse:   'course/addCourse',
+           removeCourse: 'course/removeCourse'
+       })
     }
 }
 </script>
